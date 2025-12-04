@@ -4,28 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cylvestrical Game</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=3">                
 </head>
 <body>
 
-    <div id="loading-screen">
-        <img src="scroll.png" class="scroll-bg">
-        
-        <img src="dragon.png" id="dragon">
-        
-        <img src="title-burnt.png" id="game-title">
+    <div class="app-container">
 
-        <div class="loading-ui">
-            <div id="loading-text">Загрузка</div>
-            <button id="start-button" style="display: none;">Начать</button>
+        <div id="loading-screen">
+            <img src="scroll.png" class="scroll-bg">
+            <img src="dragon.png" id="dragon">
+            <img src="title.png" id="game-title">
+
+            <div class="loading-ui">
+                <div class="progress-bar-container">
+                    <div class="progress-fill"></div>
+                </div>
+                
+                <button id="start-button" style="display: none;">Начать</button>
+            </div>
         </div>
+
+        <div id="game-screen">
+            <img src="main-menu.jpg" class="full-screen-img">
+        </div>
+
     </div>
 
-    <div id="game-screen">
-        <img src="main-menu.png" class="full-screen-img">
-    </div>
-
-    <script src="script.js"></script>
+    <script src="script.js?v=3"></script>
 </body>
 </html>
-
