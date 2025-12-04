@@ -1,4 +1,4 @@
-// 1. Предзагрузка главного экрана (ВАЖНО: тут PNG)
+// Предзагрузка главного экрана (PNG)
 const imgPreloader = new Image();
 imgPreloader.src = "main-menu.png"; 
 
@@ -9,16 +9,16 @@ window.addEventListener('load', () => {
     const gameScreen = document.getElementById('game-screen');
     const progressBar = document.querySelector('.progress-bar-container');
 
-    // Показываем кнопку через 5 секунд (когда жидкость заполнилась)
+    // Кнопка через 5 секунд
     setTimeout(() => {
-        progressBar.style.display = 'none'; // Скрываем полосу
-        startButton.style.display = 'flex'; // Показываем кнопку (flex для центрирования текста)
+        progressBar.style.display = 'none';                
+        startButton.style.display = 'flex';                
     }, 5000); 
 
     // Логика перехода
     startButton.addEventListener('click', () => {
         
-        // 1. Сначала подготавливаем игру под экраном загрузки
+        // 1. Подготавливаем игру под экраном загрузки
         gameScreen.style.display = "flex"; 
         gameScreen.style.zIndex = "1";
         loadingScreen.style.zIndex = "2";
