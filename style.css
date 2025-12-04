@@ -4,7 +4,7 @@ body, html {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: #1a0f05; /* Фон вокруг игры на ПК */
+    background-color: #1a0f05;                
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,17 +37,25 @@ body, html {
     z-index: 10;
 }
 
-/* Скрыт изначально */
 #game-screen {
     display: none;                
     z-index: 5;
 }
 
-.scroll-bg, .full-screen-img {
+.scroll-bg {
     position: absolute;
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Картинка вписывается без искажений */
+    object-fit: contain; /* Свиток вписывается */
+}
+
+.full-screen-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    
+    /* ПРАВКА: Растянуть на весь экран (может обрезать края) */
+    object-fit: cover; 
 }
 
 /* --- ДРАКОН --- */
@@ -73,19 +81,21 @@ body, html {
     width: 80%;
     top: 35vh;
     z-index: 11;                
-    opacity: 0;                
     
-    /* Появляется через 2.5с, когда дракон зависает */
+    /* ПРАВКА: Гарантируем скрытие до анимации */
+    opacity: 0 !important;                
+    display: block !important;
+    
     animation: titleAppear 1s ease-out forwards;
     animation-delay: 2.5s; 
 }
 
 @keyframes titleAppear {
-    0% { opacity: 0; transform: scale(0.8); filter: blur(10px); }                
-    100% { opacity: 1; transform: scale(1); filter: blur(0px); }                
+    0% { opacity: 0; transform: scale(0.8); }                
+    100% { opacity: 1; transform: scale(1); }                
 }
 
-/* --- ПОЛОСА ЗАГРУЗКИ ПОД ОБЛАСТЬ НА КАРТИНКЕ --- */
+/* --- ПОЛОСА ЗАГРУЗКИ --- */
 .loading-ui {
     position: absolute;
     width: 100%;
@@ -98,23 +108,24 @@ body, html {
 .progress-bar-container {
     position: absolute;
     
-    /* Эти параметры нужно подстроить под твою картинку image_68283b.jpg */
-    bottom: 12.3vh; /* Позиция снизу */
+    /* ПРАВКА: Сделано ВЫШЕ (было 12.3) */
+    bottom: 18vh; 
+    
     left: 50%;
     transform: translateX(-50%);
-    width: 63%; /* Ширина нарисованного прямоугольника */
-    height: 4vh; /* Высота нарисованного прямоугольника */
+    width: 63%;                
+    height: 4vh;                
     
-    background: transparent; /* Скрываем фон родителя */
-    border: none; /* Скрываем рамку родителя */
+    background: transparent;                
+    border: none;                
     overflow: hidden;                
-    border-radius: 5px; /* Немного закруглим жидкость */
+    border-radius: 5px;                
 }
 
 .progress-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(to right, #ff4500, #ff8c00); /* Цвет жидкости */
+    background: linear-gradient(to right, #ff4500, #ff8c00);                
     
     animation: fillProgress 5s linear forwards;
 }
@@ -127,8 +138,9 @@ body, html {
 #start-button {
     position: absolute;                
     
-    /* Накладываем прямо поверх прямоугольника загрузки */
-    bottom: 12.3vh;                
+    /* ПРАВКА: Сделано ВЫШЕ, чтобы совпасть с полосой */
+    bottom: 18vh;                
+    
     left: 50%;                
     transform: translateX(-50%);                
     
@@ -156,7 +168,6 @@ body, html {
     100% { opacity: 1; transform: translate(-50%, 0); }
 }
 
-/* Эффекты нажатия */
 #start-button:active { 
     transform: translate(-50%, 2px) scale(0.98); 
 }
