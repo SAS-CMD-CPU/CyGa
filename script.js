@@ -1,3 +1,7 @@
+// 1. Предзагрузка главного экрана (ВАЖНО: тут PNG)
+const imgPreloader = new Image();
+imgPreloader.src = "main-menu.png"; 
+
 window.addEventListener('load', () => {
     
     const startButton = document.getElementById('start-button');
@@ -5,23 +9,25 @@ window.addEventListener('load', () => {
     const gameScreen = document.getElementById('game-screen');
     const progressBar = document.querySelector('.progress-bar-container');
 
-    // Кнопка появляется после заполнения полосы (5 секунд)
+    // Показываем кнопку через 5 секунд (когда жидкость заполнилась)
     setTimeout(() => {
         progressBar.style.display = 'none'; // Скрываем полосу
-        startButton.style.display = 'block'; // Показываем кнопку
+        startButton.style.display = 'flex'; // Показываем кнопку (flex для центрирования текста)
     }, 5000); 
 
     // Логика перехода
     startButton.addEventListener('click', () => {
-        // 1. Сразу поднимаем z-index игры, чтобы она была готова
-        gameScreen.style.zIndex = "20"; 
-        gameScreen.style.display = "flex"; // Начинаем прогрузку картинки
+        
+        // 1. Сначала подготавливаем игру под экраном загрузки
+        gameScreen.style.display = "flex"; 
+        gameScreen.style.zIndex = "1";
+        loadingScreen.style.zIndex = "2";
 
-        // 2. Делаем экран загрузки прозрачным
+        // 2. Делаем экран загрузки прозрачным (плавно)
         loadingScreen.style.transition = 'opacity 0.5s ease';
         loadingScreen.style.opacity = '0';
         
-        // 3. После завершения анимации прозрачности убираем экран загрузки совсем
+        // 3. Полностью убираем после завершения анимации
         setTimeout(() => {
             loadingScreen.style.display = 'none';
         }, 500);
