@@ -4,53 +4,133 @@ body, html {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: #2c1a0b; /* Темный фон */
+    background-color: #2c1a0b;
+    font-family: Arial, sans-serif;
 }
 
 #loading-screen, #game-screen {
     width: 100%;
     height: 100%;
-    position: relative;
+    position: absolute; /* Позиционируем абсолютно друг над другом */
+    top: 0;
+    left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* Главный экран скрыт через CSS, чтобы JS его включил */
+#game-screen {
+    display: none;                
+    z-index: 20; /* Выше экрана загрузки */
 }
 
 .scroll-bg, .full-screen-img {
     position: absolute;
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Картинка вписывается, не растягиваясь */
+    object-fit: contain; /* Картинка вписывается, сохраняя пропорции */
 }
 
-/* --- АНИМАЦИЯ ДРАКОНА --- */
+/* --- АВТО-МАСШТАБИРОВАНИЕ ДРАКОНА --- */
 #dragon {
     position: absolute;
-    height: 40vh; /* Размер от высоты экрана */
+    height: 35vh; /* 35% от высоты экрана */
     z-index: 10;
+    right: -100%; /* За экраном */
+    top: 25vh; /* 25% от верха */
     
-    /* Начальная позиция - справа за экраном */
-    right: -100%;
-    top: 30%;                
-    
-    animation: dragonFly 5s ease-in-out forwards;
+    /* Анимация: прилет(1.5с) + выжиг(2с) + улет(1.5с) = 5с */
+    animation: dragonSequence 5s ease-in-out forwards;
 }
 
-@keyframes dragonFly {
-    0% {
-        right: -100%;
-    }
-    40% {
-        /* Прилетает к центру */
-        right: 10%;
-    }
-    60% {
-        /* Зависает */
-        right: 10%;
-        transform: translateY(-20px);
-    }
-    100% {
-        /* Улетает влево */
-        right: 110%;
-    }
+@keyframes dragonSequence {
+    0% { right: -100%; }
+    30% { right: 15vw; }                /* Прилетел (за 1.5с) */
+    70% { right: 15vw; transform: scale(1.1) translateY(-10px); } /* Стоит, дышит огнем */
+    100% { right: 120%; }               /* Улетел */
+}
+
+/* --- НАЗВАНИЕ --- */
+#game-title {
+    position: absolute;
+    width: 70vw; /* 70% от ширины экрана */
+    top: 35vh;
+    z-index: 5;
+    opacity: 0;
+    
+    /* Появляется, когда дракон улетает */
+    animation: titleAppear 1s ease-out forwards;
+    animation-delay: 3.5s; /* Ждет 3.5 секунды */
+}
+
+@keyframes titleAppear {
+    0% { opacity: 0; transform: scale(0.5); filter: blur(10px); }
+    100% { opacity: 1; transform: scale(1); filter: blur(0px); }
+}
+
+/* --- ЗАГРУЗКА И КНОПКА --- */
+.loading-ui {
+    position: absolute;
+    bottom: 15vh; /* 15% от низа */
+    z-index: 15;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#loading-text {
+    color: #f0e68c;
+    font-size: 5vh; /* Размер шрифта от высоты экрана */
+    text-shadow: 2px 2px 4px #000;
+    position: relative;
+    width: fit-content;
+}
+
+/* Эффект заполнения текста (три точки) */
+#loading-text::after {
+    content: "...";
+    position: absolute;
+    left: 100%;
+    animation: loadingDots 1.5s infinite;
+}
+
+@keyframes loadingDots {
+    0% { content: ""; }
+    33% { content: "."; }
+    66% { content: ".."; }
+    100% { content: "..."; }
+}
+
+/* --- СТИЛЬ КНОПКИ --- */
+#start-button {
+    padding: 2vh 5vw;
+    font-size: 4vh;
+    background: linear-gradient(to bottom, #ff8c00, #ff4500);
+    color: white;
+    border: 2px solid #b22222;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    
+    /* Анимация появления кнопки */
+    animation: buttonAppear 0.5s ease-out forwards;
+}
+
+@keyframes buttonAppear {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Анимация при наведении */
+#start-button:hover {
+    background: linear-gradient(to bottom, #ff4500, #b22222);
+    transform: scale(1.05);
+    transition: 0.2s;
+}
+
+/* Анимация при клике */
+#start-button:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 3px rgba(0,0,0,0.5);
 }
