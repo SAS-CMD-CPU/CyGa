@@ -4,7 +4,7 @@ body, html {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: #1a0f05;                
+    background-color: #1a0f05; /* Фон вокруг контейнера игры на ПК */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,26 +37,30 @@ body, html {
     z-index: 10;
 }
 
+/* Скрыт изначально через JS */
 #game-screen {
     display: none;                
     z-index: 5;
 }
 
-.scroll-bg {
+/* Общие стили для фоновых картинок */
+.scroll-bg, .full-screen-img {
     position: absolute;
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Свиток вписывается */
+}
+
+.scroll-bg {
+    object-fit: contain; /* Свиток вписывается полностью */
 }
 
 .full-screen-img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    
-    /* ПРАВКА: Растянуть на весь экран (может обрезать края) */
-    object-fit: cover; 
+    object-fit: cover; /* Фон игры растягивается и заполняет */
 }
+
+/* ========================================= */
+/* --- СТИЛИ ЭКРАНА ЗАГРУЗКИ (LOADING) --- */
+/* ========================================= */
 
 /* --- ДРАКОН --- */
 #dragon {
@@ -82,7 +86,7 @@ body, html {
     top: 35vh;
     z-index: 11;                
     
-    /* ПРАВКА: Гарантируем скрытие до анимации */
+    /* Гарантируем скрытие до начала анимации */
     opacity: 0 !important;                
     display: block !important;
     
@@ -108,7 +112,7 @@ body, html {
 .progress-bar-container {
     position: absolute;
     
-    /* ПРАВКА: Сделано ВЫШЕ (было 12.3) */
+    /* Позиция ВЫШЕ, чтобы совпасть с рамкой на картинке image_68283b.jpg */
     bottom: 18vh; 
     
     left: 50%;
@@ -138,7 +142,7 @@ body, html {
 #start-button {
     position: absolute;                
     
-    /* ПРАВКА: Сделано ВЫШЕ, чтобы совпасть с полосой */
+    /* Позиция совпадает с полосой загрузки */
     bottom: 18vh;                
     
     left: 50%;                
@@ -170,4 +174,83 @@ body, html {
 
 #start-button:active { 
     transform: translate(-50%, 2px) scale(0.98); 
+}
+
+/* ========================================= */
+/* --- СТИЛИ ИНТЕРФЕЙСА ИГРЫ (ОТДЕЛЬНЫЕ ИКОНКИ) --- */
+/* ========================================= */
+
+.game-interface {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 30; /* Выше фоновой картинки игры */
+}
+
+.icon-button {
+    position: absolute;
+    cursor: pointer;
+    background-color: transparent; /* Невидимый фон кнопки */
+    
+    /* border: 2px solid red; */ /* Раскомментируй, чтобы видеть границы для настройки */
+}
+
+/* Стилизация картинок внутри кнопок */
+.icon-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Иконка вписывается, не искажаясь */
+    transition: transform 0.1s ease; /* Плавное нажатие */
+}
+
+/* Эффект при нажатии: сама иконка немного уменьшается */
+.icon-button:active img {
+    transform: scale(0.9);
+}
+
+/* --- НАСТРОЙКА ПОЗИЦИЙ ИКОНОК --- */
+/* Используем vw/vh для адаптивности + max-width для ПК */
+
+#btn-settings {
+    top: 2%;                
+    right: 5%;                
+    width: 12vw;                
+    height: 12vw;                
+    max-width: 60px;                
+    max-height: 60px;                
+}
+
+#btn-expedition {
+    top: 25vh;
+    left: 8vw;
+    width: 35vw;                
+    height: 20vh;                
+    max-width: 180px;                
+}
+
+#btn-clan {
+    top: 25vh;
+    right: 8vw;
+    width: 35vw;                
+    height: 20vh;                
+    max-width: 180px;                
+}
+
+#btn-shop {
+    top: 50vh;
+    left: 8vw;
+    width: 35vw;                
+    height: 20vh;                
+    max-width: 180px;                
+}
+
+#btn-battle {
+    bottom: 5vh;
+    left: 50%;
+    transform: translateX(-50%);                
+    width: 45vw;                
+    height: 20vh;                
+    max-width: 220px;                
 }
