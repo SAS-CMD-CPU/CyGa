@@ -4,133 +4,140 @@ body, html {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: #2c1a0b;
-    font-family: Arial, sans-serif;
-}
-
-#loading-screen, #game-screen {
-    width: 100%;
-    height: 100%;
-    position: absolute; /* Позиционируем абсолютно друг над другом */
-    top: 0;
-    left: 0;
+    background-color: #1a0f05; /* Цвет фона за пределами игры на ПК */
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Главный экран скрыт через CSS, чтобы JS его включил */
+/* --- ОГРАНИЧЕНИЕ ДЛЯ ПК --- */
+.app-container {
+    width: 100%;
+    height: 100%;
+    /* На ПК ограничиваем ширину, сохраняя пропорции телефона */
+    max-width: 500px; /* Можно настроить под себя */
+    position: relative;
+    overflow: hidden;
+    background-color: #000;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5); /* Эффект тени для красоты на ПК */
+}
+
+#loading-screen, #game-screen {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#loading-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+/* Гарантировано скрываем игру изначально */
 #game-screen {
     display: none;                
-    z-index: 20; /* Выше экрана загрузки */
+    z-index: 5; /* Изначально ниже экрана загрузки */
 }
 
 .scroll-bg, .full-screen-img {
     position: absolute;
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Картинка вписывается, сохраняя пропорции */
+    object-fit: contain; /* Чтобы на широких ПК не обрезалось */
 }
 
-/* --- АВТО-МАСШТАБИРОВАНИЕ ДРАКОНА --- */
+/* Дракон и Заголовок остаются без изменений,vh/vw работают корректно внутри .app-container */
 #dragon {
     position: absolute;
-    height: 35vh; /* 35% от высоты экрана */
-    z-index: 10;
-    right: -100%; /* За экраном */
-    top: 25vh; /* 25% от верха */
-    
-    /* Анимация: прилет(1.5с) + выжиг(2с) + улет(1.5с) = 5с */
+    height: 30vh;
+    z-index: 11;                
+    right: -100%;
+    top: 25vh;                
     animation: dragonSequence 5s ease-in-out forwards;
 }
 
 @keyframes dragonSequence {
     0% { right: -100%; }
-    30% { right: 15vw; }                /* Прилетел (за 1.5с) */
-    70% { right: 15vw; transform: scale(1.1) translateY(-10px); } /* Стоит, дышит огнем */
-    100% { right: 120%; }               /* Улетел */
+    30% { right: 10%; }
+    70% { right: 10%; transform: scale(1.05) translateY(-5px); }                
+    100% { right: 110%; }
 }
 
-/* --- НАЗВАНИЕ --- */
 #game-title {
     position: absolute;
-    width: 70vw; /* 70% от ширины экрана */
+    width: 80%; /* Теперь % от родителя .app-container */
     top: 35vh;
-    z-index: 5;
-    opacity: 0;
-    
-    /* Появляется, когда дракон улетает */
+    z-index: 6;                
+    opacity: 0;                
     animation: titleAppear 1s ease-out forwards;
-    animation-delay: 3.5s; /* Ждет 3.5 секунды */
+    animation-delay: 3.5s; 
 }
 
 @keyframes titleAppear {
-    0% { opacity: 0; transform: scale(0.5); filter: blur(10px); }
-    100% { opacity: 1; transform: scale(1); filter: blur(0px); }
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
 }
 
-/* --- ЗАГРУЗКА И КНОПКА --- */
+/* --- ПОЛОСА ЗАГРУЗКИ ("ЖИДКОСТЬ") --- */
 .loading-ui {
     position: absolute;
-    bottom: 15vh; /* 15% от низа */
+    bottom: 15vh;
+    width: 80%; /* Ширина области загрузки */
     z-index: 15;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
 }
 
-#loading-text {
-    color: #f0e68c;
-    font-size: 5vh; /* Размер шрифта от высоты экрана */
-    text-shadow: 2px 2px 4px #000;
+.progress-bar-container {
+    width: 100%;
+    height: 4vh;
+    background: rgba(0, 0, 0, 0.5); /* Фон прямоугольника */
+    border: 2px solid #f0e68c; /* Рамка */
+    border-radius: 10px;
+    overflow: hidden; /* Чтобы жидкость не выливалась */
     position: relative;
-    width: fit-content;
 }
 
-/* Эффект заполнения текста (три точки) */
-#loading-text::after {
-    content: "...";
-    position: absolute;
-    left: 100%;
-    animation: loadingDots 1.5s infinite;
+.progress-fill {
+    height: 100%;
+    width: 0%; /* Начальная ширина "жидкости" */
+    background: linear-gradient(to right, #ff4500, #ff8c00); /* Цвет жидкости */
+    
+    /* Анимация заполнения: длится 5 секунд, как и дракон */
+    animation: fillProgress 5s linear forwards;
 }
 
-@keyframes loadingDots {
-    0% { content: ""; }
-    33% { content: "."; }
-    66% { content: ".."; }
-    100% { content: "..."; }
+@keyframes fillProgress {
+    0% { width: 0%; }
+    100% { width: 100%; }
 }
 
-/* --- СТИЛЬ КНОПКИ --- */
+/* --- КНОПКА --- */
 #start-button {
-    padding: 2vh 5vw;
-    font-size: 4vh;
+    /* Чтобы перекрыть полосу загрузки */
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    padding: 1.5vh 30px;
+    font-size: 3vh;
     background: linear-gradient(to bottom, #ff8c00, #ff4500);
     color: white;
     border: 2px solid #b22222;
     border-radius: 10px;
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    cursor: pointer;                
+    white-space: nowrap;                
     
-    /* Анимация появления кнопки */
     animation: buttonAppear 0.5s ease-out forwards;
 }
 
 @keyframes buttonAppear {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% { opacity: 0; transform: translate(-50%, 10px); }
+    100% { opacity: 1; transform: translate(-50%, 0); }
 }
-
-/* Анимация при наведении */
-#start-button:hover {
-    background: linear-gradient(to bottom, #ff4500, #b22222);
-    transform: scale(1.05);
-    transition: 0.2s;
-}
-
-/* Анимация при клике */
-#start-button:active {
-    transform: scale(0.95);
-    box-shadow: 0 2px 3px rgba(0,0,0,0.5);
-}
+#start-button:active { transform: translate(-50%, 2px) scale(0.98); }
