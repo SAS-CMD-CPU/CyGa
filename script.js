@@ -1,34 +1,29 @@
 window.addEventListener('load', () => {
     
-    const loadingText = document.getElementById('loading-text');
     const startButton = document.getElementById('start-button');
     const loadingScreen = document.getElementById('loading-screen');
     const gameScreen = document.getElementById('game-screen');
+    const progressBar = document.querySelector('.progress-bar-container');
 
-    // 1. Имитация загрузки
-    // Через 6 секунд (когда дракон улетел и название появилось)
+    // Кнопка появляется после заполнения полосы (5 секунд)
     setTimeout(() => {
-        // Скрываем текст загрузки
-        loadingText.style.display = 'none';
-        
-        // Показываем кнопку "Начать"
-        startButton.style.display = 'block';
-    }, 6000); 
+        progressBar.style.display = 'none'; // Скрываем полосу
+        startButton.style.display = 'block'; // Показываем кнопку
+    }, 5000); 
 
-    // 2. Обработка нажатия на кнопку
+    // Логика перехода
     startButton.addEventListener('click', () => {
-        // Небольшая задержка, чтобы игрок увидел анимацию нажатия кнопки (:active в CSS)
+        // 1. Сразу поднимаем z-index игры, чтобы она была готова
+        gameScreen.style.zIndex = "20"; 
+        gameScreen.style.display = "flex"; // Начинаем прогрузку картинки
+
+        // 2. Делаем экран загрузки прозрачным
+        loadingScreen.style.transition = 'opacity 0.5s ease';
+        loadingScreen.style.opacity = '0';
+        
+        // 3. После завершения анимации прозрачности убираем экран загрузки совсем
         setTimeout(() => {
-            // Плавное исчезновение экрана загрузки
-            loadingScreen.style.transition = 'opacity 0.5s';
-            loadingScreen.style.opacity = '0';
-            
-            // Через время исчезновения показываем игру
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-                gameScreen.style.display = 'flex'; // ВКЛЮЧАЕМ ГЛАВНЫЙ ЭКРАН
-            }, 500);
-            
-        }, 150); // Задержка для анимации кнопки
+            loadingScreen.style.display = 'none';
+        }, 500);
     });
 });
